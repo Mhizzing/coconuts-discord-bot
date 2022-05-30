@@ -1,20 +1,24 @@
 import os
 import discord
-from modules import *
 from discord.ext import commands
 
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='$', intents=intents)
 
-bot.author_id = mhizzing_discord_id
+author_id = os.environ['mhizzing_discord_id']
+bot.author_id = author_id
 
-bot.add_cog(Utilities(bot))
-bot.add_cog(Schedules(bot))
+extension_list = ['cogs.utility', 'cogs.communication'] 
+
+if __name__ == '__main__':
+  for extension in extension_list:
+    bot.load_extension(extension)
 
 @bot.event
 async def on_ready():
   print('I\'m working! :D')
+  await bot.change_presence(status=discord.Status.online, activity=discord.Game("with my master"))
 
 
 bot_token = os.environ['TOKEN']

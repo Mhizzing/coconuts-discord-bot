@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-class Utilities(commands.Cog):
+class UtilitiesCog(commands.Cog):
   def __init__(self, bot):
     self.bot = bot
     self._last_member = None
@@ -16,8 +16,8 @@ class Utilities(commands.Cog):
   async def ping(self, ctx: commands.Context):
     await ctx.send("Pong")
     
-  @commands.command()
-  async def hello(self, ctx: commands.Context, *, member: discord.Member = None, help="Says hello"):
+  @commands.command(help = 'Says hello')
+  async def hello(self, ctx: commands.Context, *, member: discord.Member = None):
     member = member or ctx.author
     if self._last_member is None or self._last_member.id != member.id:
       await ctx.send(f'Hello {member} :)')
@@ -25,7 +25,7 @@ class Utilities(commands.Cog):
       await ctx.send(f'Hello again {member}... :/')
     self._last_member = member
 
-  @commands.command(help = "Get server details")
+  @commands.command(help = 'Get server details')
   async def whereami(self, ctx: commands.Context):
       owner=str(ctx.guild.owner)
       region = str(ctx.guild.region)
@@ -46,3 +46,6 @@ class Utilities(commands.Cog):
       embed.add_field(name="Member Count", value=memberCount, inline=True)
   
       await ctx.send(embed=embed)
+
+def setup(bot):
+  bot.add_cog(UtilitiesCog(bot))
